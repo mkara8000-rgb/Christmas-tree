@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🎄 Noel Ağacı – Not & Hediye Bırak</title>
+  <style>
+:root{
+  --bg1:#06111a;
+  --bg2:#0b2230;
+  --card:#0f2a39;
+  --text:#e9f3ff;
+  --muted:#a8c0d6;
+  --accent:#7be2ff;
+  --gold:#ffd56a;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  min-height:100vh;
+  color:var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background: radial-gradient(1200px 700px at 30% 20%, #12344a 0%, var(--bg2) 35%, var(--bg1) 100%);
+  overflow-x:hidden;
+}
+
+/* Header */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 24px;
+  border-bottom:1px solid rgba(123,226,255,0.15);
+}
+
+.title{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.title h1{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:2px;
+}
+
+.tag{
+  font-size:13px;
+  color:var(--muted);
+}
+
+.panel{
+  display:flex;
+  gap:8px;
+}
+
+button{
+  padding:10px 18px;
+  border:none;
+  border-radius:8px;
+  background:var(--accent);
+  color:#001825;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+
+button:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(123,226,255,0.4);
+}
+
+button.secondary{
+  background:rgba(255,255,255,0.08);
+  color:var(--text);
+}
+
+button.secondary:hover{
+  background:rgba(255,255,255,0.14);
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Main layout */
+main{
+  display:grid;
+  grid-template-columns:minmax(500px,1fr) 420px;
+  gap:24px;
+  padding:24px;
+  max-width:1400px;
+  margin:0 auto;
+}
+
+@media(max-width:1000px){
+  main{
+    grid-template-columns:1fr;
+  }
+}
+
+/* Scene */
+.scene{
+  position:relative;
+  height:700px;
+  border-radius:16px;
+  background:linear-gradient(180deg, #0a1d2e 0%, #0f2a39 100%);
+  overflow:hidden;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+}
+
+/* Snow */
+.snow{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:100;
+}
+
+.snow i{
+  position:absolute;
+  top:-10px;
+  background:white;
+  border-radius:50%;
+  animation:fall linear infinite;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(720px);
+  }
+}
+
+/* Tree wrapper */
+.tree-wrap{
+  position:absolute;
+  bottom:120px;
+  left:50%;
+  transform:translateX(-50%);
+  width:350px;
+  height:450px;
+}
+
+.tree{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+
+/* Star */
+.star{
+  position:absolute;
+  top:-30px;
+  left:50%;
+  transform:translateX(-50%);
+  width:40px;
+  height:40px;
+  background:var(--gold);
+  clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  filter:drop-shadow(0 0 12px var(--gold));
+  animation:twinkle 2s ease-in-out infinite;
+}
+
+@keyframes twinkle{
+  0%,100%{opacity:1}
+  50%{opacity:0.6}
+}
+
+/* Tree layers */
+.layer{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  border-left:60px solid transparent;
+  border-right:60px solid transparent;
+  border-bottom:70px solid #1a5c3a;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.layer:nth-child(2){top:20px;width:120px}
+.layer:nth-child(3){top:70px;border-left-width:80px;border-right-width:80px;border-bottom-width:80px}
+.layer:nth-child(4){top:130px;border-left-width:100px;border-right-width:100px;border-bottom-width:90px}
+.layer:nth-child(5){top:200px;border-left-width:120px;border-right-width:120px;border-bottom-width:100px}
+.layer:nth-child(6){top:280px;border-left-width:140px;border-right-width:140px;border-bottom-width:110px}
+
+/* Trunk */
+.trunk{
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:40px;
+  height:70px;
+  background:linear-gradient(180deg, #3d2817 0%, #2d1d0f 100%);
+  border-radius:4px;
+}
+
+/* Ornaments */
+.ornament{
+  position:absolute;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  cursor:pointer;
+  transform:translate(-50%,-50%);
+  box-shadow:0 3px 8px rgba(0,0,0,0.4), inset -2px -2px 4px rgba(0,0,0,0.2);
+  transition:transform 0.2s;
+  animation:swing 3s ease-in-out infinite;
+}
+
+.ornament:hover{
+  transform:translate(-50%,-50%) scale(1.15);
+}
+
+@keyframes swing{
+  0%,100%{transform:translate(-50%,-50%) rotate(-2deg)}
+  50%{transform:translate(-50%,-50%) rotate(2deg)}
+}
+
+.ornament .emoji{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:14px;
+}
+
+/* Fireplace */
+.fireplace{
+  position:absolute;
+  bottom:20px;
+  right:40px;
+  width:180px;
+  height:200px;
+}
+
+/* Photo frame */
+.our-photo{
+  position:absolute;
+  top:8px;
+  left:50%;
+  transform:translateX(-50%);
+  text-align:center;
+  z-index:10;
+}
+
+.our-photo img{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  border:3px solid var(--gold);
+  object-fit:cover;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+
+.photo-caption{
+  margin-top:6px;
+  font-size:11px;
+  color:#f1f1f1;
+  opacity:0.85;
+}
+
+.mantle{
+  position:absolute;
+  top:80px;
+  width:100%;
+  height:12px;
+  background:#8b4513;
+  border-radius:2px;
+}
+
+.brick{
+  position:absolute;
+  top:92px;
+  width:100%;
+  height:108px;
+  background:repeating-linear-gradient(0deg, #8b3a3a 0px, #8b3a3a 18px, #6b2a2a 18px, #6b2a2a 20px);
+}
+
+.firebox{
+  position:absolute;
+  top:105px;
+  left:20px;
+  width:140px;
+  height:85px;
+  background:radial-gradient(circle at 50% 80%, #ff6b35 0%, #8b1a00 70%);
+  border-radius:8px 8px 0 0;
+  overflow:hidden;
+}
+
+.flame{
+  position:absolute;
+  bottom:10px;
+  width:20px;
+  height:40px;
+  background:linear-gradient(180deg, #ffeb3b 0%, #ff9800 50%, #ff5722 100%);
+  border-radius:50% 50% 0 0;
+  filter:blur(3px);
+  animation:flicker 0.3s ease-in-out infinite;
+}
+
+.flame:nth-child(1){left:20px;animation-delay:0s}
+.flame:nth-child(2){left:40px;height:50px;animation-delay:0.1s}
+.flame:nth-child(3){left:60px;height:45px;animation-delay:0.2s}
+.flame:nth-child(4){left:80px;animation-delay:0.15s}
+.flame:nth-child(5){left:100px;height:48px;animation-delay:0.25s}
+
+@keyframes flicker{
+  0%,100%{transform:scaleY(1)}
+  50%{transform:scaleY(1.1)}
+}
+
+.log{
+  position:absolute;
+  bottom:0;
+  left:30px;
+  width:80px;
+  height:15px;
+  background:#3d2817;
+  border-radius:4px;
+}
+
+.embers{
+  position:absolute;
+  bottom:5px;
+  left:40px;
+  width:60px;
+  height:3px;
+  background:linear-gradient(90deg, transparent, #ff4500, #ff6347, transparent);
+  filter:blur(2px);
+  animation:glow 1s ease-in-out infinite;
+}
+
+@keyframes glow{
+  0%,100%{opacity:0.5}
+  50%{opacity:1}
+}
+
+/* Ground */
+.ground{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:100px;
+  background:linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.05) 100%);
+}
+
+/* Card */
+.card{
+  background:var(--card);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  max-height:700px;
+  overflow-y:auto;
+}
+
+.card h2{
+  font-size:18px;
+  margin-bottom:20px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.field{
+  margin-bottom:12px;
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:6px;
+  color:var(--muted);
+}
+
+.field input,.field select,.field textarea{
+  width:100%;
+  padding:10px 12px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(123,226,255,0.2);
+  border-radius:8px;
+  color:var(--text);
+  font-size:14px;
+  font-family:inherit;
+}
+
+.field textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
+.hint{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+/* List */
+.list{
+  margin-top:24px;
+  padding-top:24px;
+  border-top:1px solid rgba(123,226,255,0.15);
+}
+
+.item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  background:rgba(255,255,255,0.03);
+  border-radius:8px;
+  margin-bottom:8px;
+}
+
+.item .left{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex:1;
+}
+
+.badge{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:rgba(0,0,0,0.9);
+  color:white;
+  padding:14px 24px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:600;
+  opacity:0;
+  transition:all 0.3s;
+  z-index:1000;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);
+}
+
+.toast.show{
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+
+/* Modal */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.3s;
+  z-index:500;
+  padding:24px;
+}
+
+.modal.show{
+  opacity:1;
+  pointer-events:all;
+}
+
+.modal .box{
+  background:var(--card);
+  border-radius:16px;
+  padding:24px;
+  max-width:500px;
+  width:100%;
+  box-shadow:0 12px 40px rgba(0,0,0,0.6);
+}
+
+.modal header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  padding:0;
+  border:none;
+}
+
+.modal h3{
+  font-size:18px;
+}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">
+      <div style="font-size:22px">🎄🔥</div>
+      <div>
+        <h1>Noel Ağacı – Not & Hediye Bırak</h1>
+        <div class="tag">Süs ekle • Link paylaş • Anı biriktir</div>
+      </div>
+    </div>
+    <div class="panel">
+      <button class="secondary" id="btnClear">Temizle</button>
+      <button id="btnShare">Share link üret</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="scene" id="scene">
+      <div class="snow" id="snow"></div>
+
+      <div class="tree-wrap">
+        <div class="tree" id="tree">
+          <div class="star"></div>
+          <div class="layer"></div>
+          <div class="layer"></div>
+          <div class="layer"></div>
+          <div class="layer"></div>
+          <div class="layer"></div>
+          <div class="trunk"></div>
+        </div>
+      </div>
+
+      <div class="fireplace">
+        <div class="our-photo">
+          <img src="biz.JPG" alt="Biz" />
+          <div class="photo-caption">Bizim Evimiz 🎄</div>
+        </div>
+
+        <div class="mantle"></div>
+        <div class="brick"></div>
+        <div class="firebox">
+          <div class="flame"></div>
+          <div class="flame"></div>
+          <div class="flame"></div>
+          <div class="flame"></div>
+          <div class="flame"></div>
+          <div class="log"></div>
+          <div class="embers"></div>
+        </div>
+      </div>
+
+      <div class="ground"></div>
+    </section>
+
+    <aside class="card">
+      <h2>🎁 Mustafa ve Nura bir not bırak</h2>
+
+      <div class="row">
+        <div class="field">
+          <label>İkon</label>
+          <select id="icon">
+            <option value="🎁">🎁 Hediye</option>
+            <option value="📝">📝 Not</option>
+            <option value="⭐">⭐ Dilek</option>
+            <option value="💌">💌 Mesaj</option>
+            <option value="🍪">🍪 Kurabiye</option>
+            <option value="☕">☕ Kahve</option>
+            <option value="🎧">🎧 Müzik</option>
+            <option value="🎮">🎮 Oyun</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Renk</label>
+          <select id="color">
+            <option value="#ff5a7a">Kırmızı</option>
+            <option value="#7be2ff">Mavi</option>
+            <option value="#7dffb0">Yeşil</option>
+            <option value="#ffd56a">Altın</option>
+            <option value="#d1a6ff">Mor</option>
+            <option value="#ffffff">Beyaz</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Başlık (kısa)</label>
+        <input id="title" maxlength="40" placeholder="Örn: 'Yeni yıl dileği'" />
+      </div>
+
+      <div class="field">
+        <label>Not / Hediye açıklaması</label>
+        <textarea id="message" maxlength="280" placeholder="Örn: '2026'da beraber şu şehre gidelim'"></textarea>
+        <div class="hint">İpucu: Süse tıklayınca bu mesaj açılır. (Maks. 280 karakter)</div>
+      </div>
+
+      <button id="btnAdd" style="width:100%">Ağaca bırak</button>
+
+      <div class="list">
+        <div class="hint">📌 Eklediklerin (son 10):</div>
+        <div id="items"></div>
+        <div class="hint" style="margin-top:8px">
+          Paylaşım için "Share link üret" butonu tüm süsleri linke gömer.
+          Arkadaşın linki açınca aynı ağaç yüklenir.
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modal" id="modal">
+    <div class="box">
+      <header>
+        <h3 id="mTitle">Süs</h3>
+        <button class="secondary" id="mClose">Kapat</button>
+      </header>
+      <div class="item" style="margin:0 0 10px">
+        <div class="left">
+          <div class="badge" id="mBadge">🎁</div>
+          <div>
+            <div id="mHeading" style="font-weight:800"></div>
+            <small id="mMeta"></small>
+          </div>
+        </div>
+        <button class="secondary" id="mDelete">Sil</button>
+      </div>
+      <div id="mBody" style="white-space:pre-wrap; line-height:1.5"></div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const STORAGE_KEY = "xmas_tree_notes_v1";
+  const $ = (id) => document.getElementById(id);
+
+  function toast(msg){
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"), 1600);
+  }
+
+  function toB64Url(str){
+    return btoa(unescape(encodeURIComponent(str)))
+      .replaceAll("+","-").replaceAll("/","_").replaceAll("=","");
+  }
+  function fromB64Url(b64){
+    const pad = "===".slice((b64.length + 3) % 4);
+    const s = (b64 + pad).replaceAll("-","+").replaceAll("_","/");
+    return decodeURIComponent(escape(atob(s)));
+  }
+
+  function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+  let items = [];
+
+  function saveLocal(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+  function loadLocal(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return null;
+      return JSON.parse(raw);
+    }catch{ return null; }
+  }
+
+  function renderSnow(){
+    const snow = $("snow");
+    const count = 46;
+    snow.innerHTML = "";
+    for(let i=0;i<count;i++){
+      const flake = document.createElement("i");
+      const left = Math.random()*100;
+      const size = 3 + Math.random()*6;
+      const dur = 4 + Math.random()*7;
+      const delay = Math.random()*-8;
+      flake.style.left = left + "%";
+      flake.style.width = size + "px";
+      flake.style.height = size + "px";
+      flake.style.opacity = (0.35 + Math.random()*0.6).toFixed(2);
+      flake.style.animationDuration = dur + "s";
+      flake.style.animationDelay = delay + "s";
+      snow.appendChild(flake);
+    }
+  }
+
+  function randomTreePos(){
+    let x = Math.random();
+    let y = Math.random();
+    y = Math.pow(y, 0.65);
+    const base = 0.82;
+    const top = 0.18;
+    const w = clamp(base - y*(base-top), top, base);
+    const center = 0.5 + (Math.random()*0.06 - 0.03);
+    x = clamp(center + (x-0.5)*w, 0.12, 0.88);
+    y = clamp(0.12 + y*0.78, 0.14, 0.90);
+    return { x, y };
+  }
+
+  function colorize(hex){
+    return `radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), ${hex} 55%, rgba(0,0,0,.15) 100%)`;
+  }
+
+  function clearOrnaments(){
+    const tree = $("tree");
+    tree.querySelectorAll(".ornament").forEach(n=>n.remove());
+  }
+
+  function renderOrnaments(){
+    clearOrnaments();
+    const tree = $("tree");
+    items.forEach((it) => {
+      const d = document.createElement("div");
+      d.className = "ornament";
+      d.style.left = (it.pos.x*100) + "%";
+      d.style.top  = (it.pos.y*100) + "%";
+      d.style.background = colorize(it.color);
+      d.dataset.id = it.id;
+
+      const span = document.createElement("span");
+      span.className = "emoji";
+      span.textContent = it.icon;
+      d.appendChild(span);
+
+      d.addEventListener("click", () => openModal(it.id));
+      tree.appendChild(d);
+    });
+  }
+
+  function renderList(){
+    const box = $("items");
+    box.innerHTML = "";
+    const last = items.slice(-10).reverse();
+    if(last.length === 0){
+      box.innerHTML = `<div class="hint" style="margin-top:8px">Henüz süs yok. İlk süsü sen bırak 🙂</div>`;
+      return;
+    }
+    last.forEach(it => {
+      const row = document.createElement("div");
+      row.className = "item";
+      row.innerHTML = `
+        <div class="left">
+          <div class="badge" style="background:${colorize(it.color)}">${it.icon}</div>
+          <div>
+            <div style="font-weight:800">${escapeHtml(it.title || "Başlıksız")}</div>
+            <small>${new Date(it.createdAt).toLocaleString("tr-TR")}</small>
+          </div>
+        </div>
+        <button class="secondary">Gör</button>
+      `;
+      row.querySelector("button").addEventListener("click", () => openModal(it.id));
+      box.appendChild(row);
+    });
+  }
+
+  function escapeHtml(s){
+    return (s ?? "").replace(/[&<>"']/g, (m)=>({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+  }
+
+  let currentId = null;
+  function openModal(id){
+    const it = items.find(x=>x.id===id);
+    if(!it) return;
+    currentId = id;
+    $("mBadge").style.background = colorize(it.color);
+    $("mBadge").textContent = it.icon;
+    $("mHeading").textContent = it.title || "Başlıksız";
+    $("mMeta").textContent = new Date(it.createdAt).toLocaleString("tr-TR");
+    $("mBody").textContent = it.message || "";
+    $("modal").classList.add("show");
+  }
+  function closeModal(){
+    currentId = null;
+    $("modal").classList.remove("show");
+  }
+
+  $("mClose").addEventListener("click", closeModal);
+  $("modal").addEventListener("click", (e)=>{ if(e.target.id==="modal") closeModal(); });
+
+  $("mDelete").addEventListener("click", ()=>{
+    if(!currentId) return;
+    items = items.filter(x=>x.id!==currentId);
+    saveLocal();
+    syncUrlFromState();
+    renderOrnaments(); renderList();
+    closeModal();
+    toast("Süs silindi.");
+  });
+
+  function addItem(){
+    const icon = $("icon").value;
+    const color = $("color").value;
+    const title = $("title").value.trim();
+    const message = $("message").value.trim();
+
+    if(!message && !title){
+      toast("Bir başlık veya not yaz 🙂");
+      return;
+    }
+
+    const pos = randomTreePos();
+    const it = {
+      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2),
+      icon, color,
+      title: title.slice(0,40),
+      message: message.slice(0,280),
+      pos,
+      createdAt: new Date().toISOString()
+    };
+    items.push(it);
+    saveLocal();
+    syncUrlFromState();
+    renderOrnaments(); renderList();
+    $("title").value = "";
+    $("message").value = "";
+    toast("Ağaca eklendi!");
+  }
+  $("btnAdd").addEventListener("click", addItem);
+
+  function syncUrlFromState(){
+    const payload = items.map(({id,icon,color,title,message,pos,createdAt}) => ({id,icon,color,title,message,pos,createdAt}));
+    const json = JSON.stringify(payload);
+    const b64 = toB64Url(json);
+    const url = new URL(location.href);
+    url.hash = "t=" + b64;
+    history.replaceState(null, "", url.toString());
+  }
+
+  function loadFromUrl(){
+    const h = location.hash || "";
+    const m = h.match(/t=([A-Za-z0-9\-_]+)/);
+    if(!m) return null;
+    try{
+      const json = fromB64Url(m[1]);
+      const parsed = JSON.parse(json);
+      if(!Array.isArray(parsed)) return null;
+      return parsed.filter(x => x && x.pos && typeof x.pos.x==="number" && typeof x.pos.y==="number");
+    }catch{
+      return null;
+    }
+  }
+
+  $("btnShare").addEventListener("click", async ()=>{
+    syncUrlFromState();
+    try{
+      await navigator.clipboard.writeText(location.href);
+      toast("Link kopyalandı!");
+    }catch{
+      prompt("Linki kopyala:", location.href);
+    }
+  });
+
+  $("btnClear").addEventListener("click", ()=>{
+    items = [];
+    saveLocal();
+    history.replaceState(null, "", location.pathname);
+    renderOrnaments(); renderList();
+    toast("Temizlendi.");
+  });
+
+  renderSnow();
+
+  const urlState = loadFromUrl();
+  const localState = loadLocal();
+
+  if(urlState && urlState.length){
+    items = urlState;
+    saveLocal();
+  }else if(localState && Array.isArray(localState)){
+    items = localState;
+    syncUrlFromState();
+  }else{
+    items = [];
+    syncUrlFromState();
+  }
+
+  renderOrnaments();
+  renderList();
+
+  window.addEventListener("hashchange", ()=>{
+    const s = loadFromUrl();
+    if(s){
+      items = s;
+      saveLocal();
+      renderOrnaments(); renderList();
+      toast("Ağaç yüklendi!");
+    }
+  });
+})();
+</script>
+</body>
+</html>
